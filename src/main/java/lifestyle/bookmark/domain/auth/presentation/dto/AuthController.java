@@ -1,6 +1,8 @@
 package lifestyle.bookmark.domain.auth.presentation.dto;
 
+import lifestyle.bookmark.domain.auth.presentation.dto.request.LoginMemberRequest;
 import lifestyle.bookmark.domain.auth.presentation.dto.request.SignUpMemberRequest;
+import lifestyle.bookmark.domain.auth.presentation.dto.response.TokenResponse;
 import lifestyle.bookmark.domain.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,8 +19,14 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")
-    public ResponseEntity<Void> signUp(SignUpMemberRequest signUpMemberRequest) {
-        authService.signUp(signUpMemberRequest);
+    public ResponseEntity<Void> signUp(SignUpMemberRequest request) {
+        authService.signUp(request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping("login")
+    public ResponseEntity<TokenResponse> login(LoginMemberRequest request) {
+        TokenResponse response = authService.login(request);
+        return ResponseEntity.ok().body(response);
     }
 }
