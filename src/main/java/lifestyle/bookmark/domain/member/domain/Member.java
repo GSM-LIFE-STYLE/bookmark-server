@@ -2,13 +2,14 @@ package lifestyle.bookmark.domain.member.domain;
 
 import lifestyle.bookmark.global.role.Role;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
-@Getter
+@Getter @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Member {
