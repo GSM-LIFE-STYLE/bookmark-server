@@ -1,8 +1,12 @@
 package lifestyle.bookmark.global.exception.handler;
 
+import lifestyle.bookmark.domain.auth.exception.EmailExistsException;
+import lifestyle.bookmark.domain.auth.exception.LoginIdExistsException;
 import lifestyle.bookmark.domain.member.exception.MemberNotFoundException;
 import lifestyle.bookmark.domain.auth.exception.PasswordMismatchException;
 import lifestyle.bookmark.global.exception.ErrorMessage;
+import lifestyle.bookmark.global.security.exception.TokenExpirationException;
+import lifestyle.bookmark.global.security.exception.TokenNotValidException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +33,33 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(e.getErrorCode().getStatus()));
     }
 
+    @ExceptionHandler(LoginIdExistsException.class)
+    public ResponseEntity<ErrorMessage> handleLoginIdExistsException(HttpServletRequest request , LoginIdExistsException e) {
+        printError(request, e, e.getErrorCode().getMessage());
+        ErrorMessage errorResponse = new ErrorMessage(e.getErrorCode().getMessage(), e.getErrorCode().getStatus());
+        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(e.getErrorCode().getStatus()));
+    }
 
+    @ExceptionHandler(EmailExistsException.class)
+    public ResponseEntity<ErrorMessage> handleEmailExistsException(HttpServletRequest request , EmailExistsException e) {
+        printError(request, e, e.getErrorCode().getMessage());
+        ErrorMessage errorResponse = new ErrorMessage(e.getErrorCode().getMessage(), e.getErrorCode().getStatus());
+        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(e.getErrorCode().getStatus()));
+    }
+
+    @ExceptionHandler(TokenExpirationException.class)
+    public ResponseEntity<ErrorMessage> handleTokenExpirationException(HttpServletRequest request , TokenExpirationException e) {
+        printError(request, e, e.getErrorCode().getMessage());
+        ErrorMessage errorResponse = new ErrorMessage(e.getErrorCode().getMessage(), e.getErrorCode().getStatus());
+        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(e.getErrorCode().getStatus()));
+    }
+
+    @ExceptionHandler(TokenNotValidException.class)
+    public ResponseEntity<ErrorMessage> handleTokenNotValidException(HttpServletRequest request , TokenNotValidException e) {
+        printError(request, e, e.getErrorCode().getMessage());
+        ErrorMessage errorResponse = new ErrorMessage(e.getErrorCode().getMessage(), e.getErrorCode().getStatus());
+        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(e.getErrorCode().getStatus()));
+    }
 
     private void printError(HttpServletRequest request, RuntimeException ex, String message) {
         log.error(request.getRequestURI());

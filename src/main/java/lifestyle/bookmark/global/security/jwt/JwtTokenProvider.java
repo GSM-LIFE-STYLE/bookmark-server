@@ -38,6 +38,7 @@ public class JwtTokenProvider {
     @AllArgsConstructor
     private enum TokenClaimName {
         USER_EMAIL("email"),
+        LOGIN_ID("loginId"),
         TOKEN_TYPE("tokenType");
         String value;
     }
@@ -47,10 +48,11 @@ public class JwtTokenProvider {
         return Keys.hmacShaKeyFor(bytes);
     }
 
-    private String generateToken(String userEmail, TokenType tokenType, String secret, long expireTime) {
+    private String generateToken(String userEmail, String loginId , TokenType tokenType, String secret, long expireTime) {
         final Claims claims = Jwts.claims();
         claims.put(TokenClaimName.USER_EMAIL.value, userEmail);
         claims.put(TokenClaimName.TOKEN_TYPE.value, tokenType);
+        claims.put(TokenClaimName.LOGIN_ID.value, loginId);
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
@@ -87,12 +89,14 @@ public class JwtTokenProvider {
         return extractAllClaims(token, secret).get(TokenClaimName.TOKEN_TYPE.value, String.class);
     }
 
-    public String generatedAccessToken(String email) {
-        return generateToken(email, TokenType.ACCESS_TOKEN, jwtProperties.getAccessSecret(), ACCESS_TOKEN_EXPIRE_TIME);
+    public String generatedAccessToken(String email , String loginId) {
+        return generateToken(email, loginId ,TokenType.ACCESS_TOKEN,
+                jwtProperties.getAccessSecret(), ACCESS_TOKEN_EXPIRE_TIME);
     }
 
-    public String generatedRefreshToken(String email) {
-        return generateToken(email, TokenType.REFRESH_TOKEN, jwtProperties.getRefreshSecret(), REFRESH_TOKEN_EXPIRE_TIME);
+    public String generatedRefreshToken(String email , String loginId) {
+        return generateToken(email, loginId, TokenType.REFRESH_TOKEN,
+                jwtProperties.getRefreshSecret(), REFRESH_TOKEN_EXPIRE_TIME);
     }
     public UsernamePasswordAuthenticationToken authentication(String email) {
         UserDetails userDetails = memberDetailsService.loadUserByUsername(email);
