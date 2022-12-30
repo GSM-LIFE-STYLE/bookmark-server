@@ -1,4 +1,4 @@
-package lifestyle.bookmark.domain.member.presentation.dto;
+package lifestyle.bookmark.domain.auth.presentation.dto.request;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

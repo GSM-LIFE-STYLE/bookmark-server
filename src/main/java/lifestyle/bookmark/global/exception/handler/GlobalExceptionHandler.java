@@ -1,6 +1,7 @@
 package lifestyle.bookmark.global.exception.handler;
 
 import lifestyle.bookmark.domain.member.exception.MemberNotFoundException;
+import lifestyle.bookmark.domain.auth.exception.PasswordMismatchException;
 import lifestyle.bookmark.global.exception.ErrorMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,14 @@ public class GlobalExceptionHandler {
         ErrorMessage errorResponse = new ErrorMessage(e.getErrorCode().getMessage(), e.getErrorCode().getStatus());
         return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(e.getErrorCode().getStatus()));
     }
+
+    @ExceptionHandler(PasswordMismatchException.class)
+    public ResponseEntity<ErrorMessage> handlePasswordMismatchException(HttpServletRequest request , PasswordMismatchException e) {
+        printError(request, e, e.getErrorCode().getMessage());
+        ErrorMessage errorResponse = new ErrorMessage(e.getErrorCode().getMessage(), e.getErrorCode().getStatus());
+        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(e.getErrorCode().getStatus()));
+    }
+
 
 
     private void printError(HttpServletRequest request, RuntimeException ex, String message) {
