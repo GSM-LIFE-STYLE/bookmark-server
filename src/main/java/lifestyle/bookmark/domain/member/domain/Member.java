@@ -1,4 +1,4 @@
-package lifestyle.bookmark.domain.member.entity;
+package lifestyle.bookmark.domain.member.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
