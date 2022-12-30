@@ -1,6 +1,8 @@
 package lifestyle.bookmark.global.security;
 
 import lifestyle.bookmark.global.filter.JwtRequestFilter;
+import lifestyle.bookmark.global.security.handler.CustomAccessDeniedHandler;
+import lifestyle.bookmark.global.security.handler.CustomAuthenticationEntryPointHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

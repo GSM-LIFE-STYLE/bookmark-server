@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -17,7 +18,7 @@ import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
-public class JwtRequestFilter {
+public class JwtRequestFilter extends OncePerRequestFilter {
     private final JwtTokenProvider tokenProvider;
     private final JwtProperties jwtProperties;
 
