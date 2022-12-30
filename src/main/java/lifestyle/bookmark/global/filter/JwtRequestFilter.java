@@ -1,5 +1,8 @@
 package lifestyle.bookmark.global.filter;
 
+import lifestyle.bookmark.global.security.exception.TokenNotValidException;
+import lifestyle.bookmark.global.security.jwt.JwtTokenProvider;
+import lifestyle.bookmark.global.security.jwt.properties.JwtProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
