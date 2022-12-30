@@ -52,8 +52,8 @@ public class AuthServiceImpl implements AuthService {
 
         memberFacade.checkPassword(member, request.getPassword());
 
-        String accessToken = jwtTokenProvider.generatedAccessToken(member.getLoginId(), member.getEmail());
-        String refreshToken = jwtTokenProvider.generatedRefreshToken(member.getLoginId(), member.getEmail());
+        String accessToken = jwtTokenProvider.generatedAccessToken(member.getEmail());
+        String refreshToken = jwtTokenProvider.generatedRefreshToken(member.getEmail());
 
         return TokenResponse.builder()
                 .accessToken(accessToken).refreshToken(refreshToken)

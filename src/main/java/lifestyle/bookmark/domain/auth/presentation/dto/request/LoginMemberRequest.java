@@ -1,17 +1,20 @@
 package lifestyle.bookmark.domain.auth.presentation.dto.request;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 
 @Getter
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 public class LoginMemberRequest {
 
     @NotEmpty
-    private final String loginId;
+    private  String loginId;
 
     @NotEmpty
-    private final String password;
+    private  String password;
 }
