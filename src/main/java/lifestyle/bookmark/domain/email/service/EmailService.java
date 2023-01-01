@@ -5,4 +5,5 @@ import lifestyle.bookmark.domain.email.presentation.dto.SendEmailRequest;
 
 public interface EmailService {
     void sendEmail(SendEmailRequest request);
+    void checkEmail(String email, String authKey);
 }
