@@ -4,6 +4,9 @@ import lifestyle.bookmark.domain.auth.exception.EmailExistsException;
 import lifestyle.bookmark.domain.auth.exception.LoginIdExistsException;
 import lifestyle.bookmark.domain.auth.presentation.dto.request.LoginMemberRequest;
 import lifestyle.bookmark.domain.auth.presentation.dto.response.TokenResponse;
+import lifestyle.bookmark.domain.email.domain.EmailAuth;
+import lifestyle.bookmark.domain.email.domain.repository.EmailAuthRepository;
+import lifestyle.bookmark.domain.email.exception.NotVerifyEmailException;
 import lifestyle.bookmark.domain.member.domain.Member;
 import lifestyle.bookmark.domain.member.domain.repository.MemberRepository;
 import lifestyle.bookmark.domain.member.exception.MemberNotFoundException;
@@ -27,12 +30,20 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtProperties jwtProperties;
+    private final EmailAuthRepository emailAuthRepository;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void signUp(SignUpMemberRequest request) {
 
         verifyMember(request);
+
+        EmailAuth emailAuth = emailAuthRepository.findById(request.getEmail())
+                .orElseThrow(() -> new NotVerifyEmailException("인증되지 않은 이메일입니다."));
+
+        if(!emailAuth.getAuthentication()){
+            throw new NotVerifyEmailException("인증되지 않은 이메일입니다.");
+        }
 
         Member member = Member.builder()
                 .loginId(request.getLoginId())
