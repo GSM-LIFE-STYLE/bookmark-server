@@ -2,6 +2,8 @@ package lifestyle.bookmark.global.exception.handler;
 
 import lifestyle.bookmark.domain.auth.exception.EmailExistsException;
 import lifestyle.bookmark.domain.auth.exception.LoginIdExistsException;
+import lifestyle.bookmark.domain.email.exception.AuthCodeExpiredException;
+import lifestyle.bookmark.domain.email.exception.ManyRequestEmailAuthException;
 import lifestyle.bookmark.domain.member.exception.MemberNotFoundException;
 import lifestyle.bookmark.domain.auth.exception.PasswordMismatchException;
 import lifestyle.bookmark.global.exception.ErrorMessage;
@@ -56,6 +58,20 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(TokenNotValidException.class)
     public ResponseEntity<ErrorMessage> handleTokenNotValidException(HttpServletRequest request , TokenNotValidException e) {
+        printError(request, e, e.getErrorCode().getMessage());
+        ErrorMessage errorResponse = new ErrorMessage(e.getErrorCode().getMessage(), e.getErrorCode().getStatus());
+        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(e.getErrorCode().getStatus()));
+    }
+
+    @ExceptionHandler(AuthCodeExpiredException.class)
+    public ResponseEntity<ErrorMessage> handleAuthCodeExpiredException(HttpServletRequest request , AuthCodeExpiredException e) {
+        printError(request, e, e.getErrorCode().getMessage());
+        ErrorMessage errorResponse = new ErrorMessage(e.getErrorCode().getMessage(), e.getErrorCode().getStatus());
+        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(e.getErrorCode().getStatus()));
+    }
+
+    @ExceptionHandler(ManyRequestEmailAuthException.class)
+    public ResponseEntity<ErrorMessage> handleManyRequestEmailAuthException(HttpServletRequest request , ManyRequestEmailAuthException e) {
         printError(request, e, e.getErrorCode().getMessage());
         ErrorMessage errorResponse = new ErrorMessage(e.getErrorCode().getMessage(), e.getErrorCode().getStatus());
         return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(e.getErrorCode().getStatus()));
