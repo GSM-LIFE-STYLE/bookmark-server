@@ -4,6 +4,8 @@ import lifestyle.bookmark.domain.auth.exception.EmailExistsException;
 import lifestyle.bookmark.domain.auth.exception.LoginIdExistsException;
 import lifestyle.bookmark.domain.email.exception.AuthCodeExpiredException;
 import lifestyle.bookmark.domain.email.exception.ManyRequestEmailAuthException;
+import lifestyle.bookmark.domain.email.exception.MisMatchAuthCodeException;
+import lifestyle.bookmark.domain.email.exception.NotVerifyEmailException;
 import lifestyle.bookmark.domain.member.exception.MemberNotFoundException;
 import lifestyle.bookmark.domain.auth.exception.PasswordMismatchException;
 import lifestyle.bookmark.global.exception.ErrorMessage;
@@ -72,6 +74,20 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ManyRequestEmailAuthException.class)
     public ResponseEntity<ErrorMessage> handleManyRequestEmailAuthException(HttpServletRequest request , ManyRequestEmailAuthException e) {
+        printError(request, e, e.getErrorCode().getMessage());
+        ErrorMessage errorResponse = new ErrorMessage(e.getErrorCode().getMessage(), e.getErrorCode().getStatus());
+        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(e.getErrorCode().getStatus()));
+    }
+
+    @ExceptionHandler(MisMatchAuthCodeException.class)
+    public ResponseEntity<ErrorMessage> handleMisMatchAuthCodeException(HttpServletRequest request , MisMatchAuthCodeException e) {
+        printError(request, e, e.getErrorCode().getMessage());
+        ErrorMessage errorResponse = new ErrorMessage(e.getErrorCode().getMessage(), e.getErrorCode().getStatus());
+        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(e.getErrorCode().getStatus()));
+    }
+
+    @ExceptionHandler(NotVerifyEmailException.class)
+    public ResponseEntity<ErrorMessage> handleNotVerifyEmailException(HttpServletRequest request , NotVerifyEmailException e) {
         printError(request, e, e.getErrorCode().getMessage());
         ErrorMessage errorResponse = new ErrorMessage(e.getErrorCode().getMessage(), e.getErrorCode().getStatus());
         return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(e.getErrorCode().getStatus()));

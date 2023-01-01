@@ -4,8 +4,10 @@ import lifestyle.bookmark.domain.email.domain.EmailAuth;
 import lifestyle.bookmark.domain.email.domain.repository.EmailAuthRepository;
 import lifestyle.bookmark.domain.email.exception.AuthCodeExpiredException;
 import lifestyle.bookmark.domain.email.exception.ManyRequestEmailAuthException;
+import lifestyle.bookmark.domain.email.exception.MisMatchAuthCodeException;
 import lifestyle.bookmark.domain.email.presentation.dto.SendEmailRequest;
 import lifestyle.bookmark.domain.email.service.EmailService;
+import lifestyle.bookmark.domain.member.exception.MemberNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.util.Objects;
 import java.util.Random;
 
 @Service
@@ -34,6 +37,16 @@ public class EmailServiceImpl implements EmailService {
         String authKey = String.valueOf(random.nextInt(8888) + 1111);
 
         sendAuthEmail(request.getEmail(),authKey);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void checkEmail(String email, String authKey) {
+        EmailAuth emailAuthEntity = emailAuthRepository.findById(email)
+                .orElseThrow(()-> new MemberNotFoundException("유저를 찾을 수 없습니다."));
+        checkAuthKey(emailAuthEntity,authKey);
+        emailAuthEntity.updateAuthentication(true);
+        emailAuthRepository.save(emailAuthEntity);
     }
 
     private void sendAuthEmail(String email, String authKey) {
@@ -65,4 +78,10 @@ public class EmailServiceImpl implements EmailService {
             throw new AuthCodeExpiredException("메일 발송에 실패했습니다");
         }
     }
+    private void checkAuthKey(EmailAuth emailAuthEntity, String authKey) {
+        if(!Objects.equals(emailAuthEntity.getRandomValue(), authKey)){
+            throw new MisMatchAuthCodeException("인증번호가 일치하지 않습니다.");
+        }
+    }
+
 }
