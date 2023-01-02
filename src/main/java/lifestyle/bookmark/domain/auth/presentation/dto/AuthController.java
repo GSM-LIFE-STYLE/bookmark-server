@@ -7,10 +7,7 @@ import lifestyle.bookmark.domain.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -31,5 +28,11 @@ public class AuthController {
     public ResponseEntity<TokenResponse> login(@RequestBody @Valid LoginMemberRequest request) {
         TokenResponse response = authService.login(request);
         return ResponseEntity.ok().body(response);
+    }
+
+    @PatchMapping
+    public ResponseEntity<TokenResponse> reissue(@RequestHeader("RefreshToken") String token) {
+        TokenResponse reIssueToken = authService.reissue(token);
+        return new ResponseEntity<>(reIssueToken, HttpStatus.OK);
     }
 }
