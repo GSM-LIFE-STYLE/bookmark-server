@@ -2,6 +2,7 @@ package lifestyle.bookmark.global.exception.handler;
 
 import lifestyle.bookmark.domain.auth.exception.EmailExistsException;
 import lifestyle.bookmark.domain.auth.exception.LoginIdExistsException;
+import lifestyle.bookmark.domain.auth.exception.RefreshTokenNotFoundException;
 import lifestyle.bookmark.domain.email.exception.AuthCodeExpiredException;
 import lifestyle.bookmark.domain.email.exception.ManyRequestEmailAuthException;
 import lifestyle.bookmark.domain.email.exception.MisMatchAuthCodeException;
@@ -88,6 +89,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NotVerifyEmailException.class)
     public ResponseEntity<ErrorMessage> handleNotVerifyEmailException(HttpServletRequest request , NotVerifyEmailException e) {
+        printError(request, e, e.getErrorCode().getMessage());
+        ErrorMessage errorResponse = new ErrorMessage(e.getErrorCode().getMessage(), e.getErrorCode().getStatus());
+        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(e.getErrorCode().getStatus()));
+    }
+
+    @ExceptionHandler(RefreshTokenNotFoundException.class)
+    public ResponseEntity<ErrorMessage> handleRefreshTokenNotFoundException(HttpServletRequest request , RefreshTokenNotFoundException e) {
         printError(request, e, e.getErrorCode().getMessage());
         ErrorMessage errorResponse = new ErrorMessage(e.getErrorCode().getMessage(), e.getErrorCode().getStatus());
         return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(e.getErrorCode().getStatus()));
