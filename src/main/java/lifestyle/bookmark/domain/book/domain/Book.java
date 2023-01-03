@@ -1,5 +1,6 @@
 package lifestyle.bookmark.domain.book.domain;
 
+import lifestyle.bookmark.domain.member.domain.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,4 +27,8 @@ public class Book {
 
     @Column(name = "author_name")
     private String authorName;
+
+    @ManyToOne
+    @JoinColumn(name = "member")
+    private Member member;
 }

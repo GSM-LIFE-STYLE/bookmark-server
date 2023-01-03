@@ -1,5 +1,6 @@
 package lifestyle.bookmark.domain.member.domain;
 
+import lifestyle.bookmark.domain.book.domain.Book;
 import lifestyle.bookmark.global.role.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter @Builder
@@ -33,4 +35,8 @@ public class Member {
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToMany
+    @JoinColumn(name = "books")
+    private List<Book> books;
 }
