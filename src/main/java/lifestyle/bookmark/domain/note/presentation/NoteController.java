@@ -20,8 +20,8 @@ public class NoteController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteNote(@PathVariable Integer noteId) {
-        noteService.deleteNote(noteId);
+    public ResponseEntity<Void> deleteNote(@PathVariable Integer id) {
+        noteService.deleteNote(id);
         return ResponseEntity.ok().build();
     }
 }
