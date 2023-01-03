@@ -16,9 +16,10 @@ public enum ErrorCode {
     ALREADY_EXIST_ID("이미 존재하는 아이디입니다.", 400),
     TOKEN_NOT_VALID("토큰이 유효 하지 않습니다.", 401),
     TOKEN_EXPIRATION("토큰이 만료 되었습니다.", 401),
-    APIKEY_NOT_FOUND("인증키를 찾을 수 없음", 404),
+    NOT_FOUND_NOTE("존재하지 않는 기록장입니다.", 404),
     ALREADY_EXISTS_BOOK("이미 등록된 책입니다.", 400),
     NOT_FOUND_BOOK("존재하지 않는 책 입니다." , 404),
+    UNREGISTER_BOOK("등록되지 않은 책입니다.", 400),
     REFRESH_TOKEN_NOT_FOUND("존재하지 않는 리프레시 토큰입니다.", 404);
 
     private final String message;
