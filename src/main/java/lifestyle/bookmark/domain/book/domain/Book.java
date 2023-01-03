@@ -31,4 +31,16 @@ public class Book {
     @ManyToOne
     @JoinColumn(name = "member")
     private Member member;
+
+    public void updateBookTitle(String bookTitle) {
+        this.bookTitle = bookTitle;
+    }
+
+    public void updateBookPage(Integer bookPage) {
+        this.bookPage = bookPage;
+    }
+
+    public void updateAuthorName(String authorName) {
+        this.authorName = authorName;
+    }
 }

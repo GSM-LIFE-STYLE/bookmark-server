@@ -5,6 +5,7 @@ import lifestyle.bookmark.domain.book.domain.repository.BookRepository;
 import lifestyle.bookmark.domain.book.exception.AlreadyExistsBookException;
 import lifestyle.bookmark.domain.book.exception.NotFoundBookException;
 import lifestyle.bookmark.domain.book.presentation.dto.request.RegisterBookRequest;
+import lifestyle.bookmark.domain.book.presentation.dto.request.UpdateBookRequest;
 import lifestyle.bookmark.domain.book.presentation.dto.response.BookResponse;
 import lifestyle.bookmark.domain.book.service.BookService;
 import lifestyle.bookmark.domain.book.util.BookUtil;
@@ -35,6 +36,14 @@ public class BookServiceImpl implements BookService {
             throw new AlreadyExistsBookException("이미 등록한 책입니다.");
     }
 
+    private void updateBookEntity(Book book , UpdateBookRequest request) {
+        if(request.getBookTitle() != null)
+            book.updateBookTitle(request.getBookTitle());
+        if(request.getBookPage() != null)
+            book.updateBookPage(request.getBookPage());
+        if(request.getAuthorName() != null)
+            book.updateAuthorName(request.getAuthorName());
+    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -70,8 +79,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookResponse lookUpBook(Integer bookId) {
-        Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new NotFoundBookException("등록되지 않은 책입니다."));
+        Book book = bookRepository.findById(bookId).orElseThrow(
+                () -> new NotFoundBookException("등록되지 않은 책입니다."));
 
         return BookResponse.builder()
                 .bookTitle(book.getBookTitle())
@@ -89,5 +98,15 @@ public class BookServiceImpl implements BookService {
 
         List<BookResponse> response = bookUtil.toBookDtoList(books);
         return response;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateBook(Integer bookId, UpdateBookRequest request) {
+        Book book = bookRepository.findById(bookId).orElseThrow(
+                () -> new NotFoundBookException("등록되지 않은 책입니다."));
+        updateBookEntity(book, request);
+
+        bookRepository.save(book);
     }
 }
