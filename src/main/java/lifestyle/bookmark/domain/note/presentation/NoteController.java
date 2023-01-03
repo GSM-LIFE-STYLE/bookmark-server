@@ -4,9 +4,7 @@ import lifestyle.bookmark.domain.note.presentation.dto.request.WriteNoteRequest;
 import lifestyle.bookmark.domain.note.service.NoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,6 +16,12 @@ public class NoteController {
     @PostMapping
     public ResponseEntity<Void> writeNote(WriteNoteRequest request) {
         noteService.writeNote(request);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteNote(@PathVariable Integer noteId) {
+        noteService.deleteNote(noteId);
         return ResponseEntity.ok().build();
     }
 }
