@@ -78,6 +78,16 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateBook(Integer bookId, UpdateBookRequest request) {
+        Book book = bookRepository.findById(bookId).orElseThrow(
+                () -> new NotFoundBookException("등록되지 않은 책입니다."));
+        updateBookEntity(book, request);
+
+        bookRepository.save(book);
+    }
+
+    @Override
     public BookResponse lookUpBook(Integer bookId) {
         Book book = bookRepository.findById(bookId).orElseThrow(
                 () -> new NotFoundBookException("등록되지 않은 책입니다."));
@@ -100,13 +110,5 @@ public class BookServiceImpl implements BookService {
         return response;
     }
 
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void updateBook(Integer bookId, UpdateBookRequest request) {
-        Book book = bookRepository.findById(bookId).orElseThrow(
-                () -> new NotFoundBookException("등록되지 않은 책입니다."));
-        updateBookEntity(book, request);
 
-        bookRepository.save(book);
-    }
 }
