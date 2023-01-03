@@ -8,6 +8,7 @@ import lifestyle.bookmark.domain.member.domain.Member;
 import lifestyle.bookmark.domain.member.facade.MemberFacade;
 import lifestyle.bookmark.domain.note.domain.Note;
 import lifestyle.bookmark.domain.note.domain.repository.NoteRepository;
+import lifestyle.bookmark.domain.note.exception.NotFoundNoteException;
 import lifestyle.bookmark.domain.note.presentation.dto.request.WriteNoteRequest;
 import lifestyle.bookmark.domain.note.service.NoteService;
 import lombok.RequiredArgsConstructor;
@@ -31,28 +32,44 @@ public class NoteServiceImpl implements NoteService {
         }
     }
 
+    private void verifyMemberAndBook(Member member) {
+        Member currentMember = memberFacade.getCurrentMember();
+        if(!member.equals(currentMember))
+            throw new UnregisterBookException("등록하지 않은 책입니다.");
+    }
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void writeNote(WriteNoteRequest request) {
         Book book = bookRepository.findById(request.getBookId())
                 .orElseThrow(() -> new NotFoundBookException("존재하지 않은 책입니다."));
         Integer readPage = request.getReadPage();
-        Member currentMember = memberFacade.getCurrentMember();
 
-        if(!book.getMember().equals(currentMember))
-            throw new UnregisterBookException("등록하지 않은 책입니다.");
+       verifyMemberAndBook(book.getMember());
 
-        verifyReadBook(book, readPage);
+        if(!book.isDoneToRead())
+            verifyReadBook(book, readPage);
 
         bookRepository.save(book);
 
         Note note = Note.builder()
                 .noteContent(request.getNoteContent())
                 .noteTitle(request.getNoteTitle())
-                .member(currentMember)
+                .member(book.getMember())
                 .book(book)
                 .build();
 
         noteRepository.save(note);
     }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteNote(Integer noteId) {
+        Note note = noteRepository.findById(noteId)
+                .orElseThrow(() -> new NotFoundNoteException("기록장을 찾을 수 없습니다."));
+
+
+    }
+
+
 }
