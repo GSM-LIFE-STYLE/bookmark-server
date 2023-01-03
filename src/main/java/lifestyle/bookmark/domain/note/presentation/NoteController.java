@@ -1,6 +1,7 @@
 package lifestyle.bookmark.domain.note.presentation;
 
 import lifestyle.bookmark.domain.note.presentation.dto.request.WriteNoteRequest;
+import lifestyle.bookmark.domain.note.presentation.dto.response.GetNoteResponse;
 import lifestyle.bookmark.domain.note.service.NoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,12 @@ public class NoteController {
     public ResponseEntity<Void> writeNote(WriteNoteRequest request) {
         noteService.writeNote(request);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<GetNoteResponse> lookUpNote(@PathVariable Integer id) {
+        GetNoteResponse response = noteService.lookUpNote(id);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
