@@ -39,4 +39,8 @@ public class Member {
     @OneToMany
     @JoinColumn(name = "books")
     private List<Book> books;
+
+    public void updateBooks(List<Book> books) {
+        this.books = books;
+    }
 }

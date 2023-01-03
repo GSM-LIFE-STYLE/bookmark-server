@@ -4,4 +4,5 @@ import lifestyle.bookmark.domain.book.presentation.dto.request.RegisterBookReque
 
 public interface BookService {
     void registerBook(RegisterBookRequest request);
+    void deleteBook(Integer bookId);
 }
