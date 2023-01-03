@@ -6,6 +6,7 @@ import lifestyle.bookmark.domain.book.exception.NotFoundBookException;
 import lifestyle.bookmark.domain.book.exception.UnregisterBookException;
 import lifestyle.bookmark.domain.member.domain.Member;
 import lifestyle.bookmark.domain.member.facade.MemberFacade;
+import lifestyle.bookmark.domain.note.domain.Note;
 import lifestyle.bookmark.domain.note.domain.repository.NoteRepository;
 import lifestyle.bookmark.domain.note.presentation.dto.request.WriteNoteRequest;
 import lifestyle.bookmark.domain.note.service.NoteService;
@@ -22,20 +23,36 @@ public class NoteServiceImpl implements NoteService {
     private final BookRepository bookRepository;
 
 
+    private void verifyReadBook(Book book , Integer readPage) {
+        if(book.getReadingPage() <= 0) {
+            book.updateIsDoneToRead();
+        } else {
+            book.readBookPage(readPage);
+        }
+    }
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void writeNote(WriteNoteRequest request) {
         Book book = bookRepository.findById(request.getBookId())
                 .orElseThrow(() -> new NotFoundBookException("존재하지 않은 책입니다."));
-
-        // 독서 노트 등록 -> 책에 관한 독서 노트 -> 책 있는거맞는데 연관관계가 멤버랑 있는지 어캐앎?
-        // 책의 멤버와 노트의 멤버가 같은지 비교?
-
+        Integer readPage = request.getReadPage();
         Member currentMember = memberFacade.getCurrentMember();
 
         if(!book.getMember().equals(currentMember))
             throw new UnregisterBookException("등록하지 않은 책입니다.");
 
+        verifyReadBook(book, readPage);
 
+        bookRepository.save(book);
+
+        Note note = Note.builder()
+                .noteContent(request.getNoteContent())
+                .noteTitle(request.getNoteTitle())
+                .member(currentMember)
+                .book(book)
+                .build();
+
+        noteRepository.save(note);
     }
 }

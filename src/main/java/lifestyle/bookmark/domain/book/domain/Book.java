@@ -32,6 +32,11 @@ public class Book {
     @JoinColumn(name = "member")
     private Member member;
 
+    @Column(name = "reading_page")
+    private Integer readingPage = bookPage;
+
+    private boolean isDoneToRead = false;
+
     public void updateBookTitle(String bookTitle) {
         this.bookTitle = bookTitle;
     }
@@ -42,5 +47,13 @@ public class Book {
 
     public void updateAuthorName(String authorName) {
         this.authorName = authorName;
+    }
+
+    public void updateIsDoneToRead() {
+        this.isDoneToRead = true;
+    }
+
+    public void readBookPage(Integer readPage) {
+        this.readingPage -= readPage;
     }
 }
