@@ -94,7 +94,7 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public List<GetNoteResponse> lookUpNotes() {
-        List<Note> notes = noteRepository.findAll();
+        List<Note> notes = noteRepository.findByMember(memberFacade.getCurrentMember());
 
         if(notes.isEmpty())
             throw new NotFoundNoteException("존재하지 않는 독서기록장 입니다.");
