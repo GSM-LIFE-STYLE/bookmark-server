@@ -10,6 +10,7 @@ import lifestyle.bookmark.domain.note.domain.Note;
 import lifestyle.bookmark.domain.note.domain.repository.NoteRepository;
 import lifestyle.bookmark.domain.note.exception.NotFoundNoteException;
 import lifestyle.bookmark.domain.note.presentation.dto.request.WriteNoteRequest;
+import lifestyle.bookmark.domain.note.presentation.dto.response.GetNoteResponse;
 import lifestyle.bookmark.domain.note.service.NoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -73,5 +74,19 @@ public class NoteServiceImpl implements NoteService {
         noteRepository.deleteById(noteId);
     }
 
+    @Override
+    public GetNoteResponse lookUpNote(Integer noteId) {
+        Note note = noteRepository.findById(noteId)
+                .orElseThrow(() -> new NotFoundNoteException("독서기록장이 존재하지 않습니다."));
+
+        verifyMember(note.getMember());
+
+        return GetNoteResponse.builder()
+                .noteContent(note.getNoteContent())
+                .noteTitle(note.getNoteTitle())
+                .readPage(note.getReadPage())
+                .bookTitle(note.getBook().getBookTitle())
+                .build();
+    }
 
 }
