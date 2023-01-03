@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("note")
@@ -18,6 +20,12 @@ public class NoteController {
     public ResponseEntity<Void> writeNote(WriteNoteRequest request) {
         noteService.writeNote(request);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<GetNoteResponse>> lookUpNotes() {
+        List<GetNoteResponse> response = noteService.lookUpNotes();
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")

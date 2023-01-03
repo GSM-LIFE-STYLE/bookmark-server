@@ -12,9 +12,12 @@ import lifestyle.bookmark.domain.note.exception.NotFoundNoteException;
 import lifestyle.bookmark.domain.note.presentation.dto.request.WriteNoteRequest;
 import lifestyle.bookmark.domain.note.presentation.dto.response.GetNoteResponse;
 import lifestyle.bookmark.domain.note.service.NoteService;
+import lifestyle.bookmark.domain.note.util.NoteUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +26,7 @@ public class NoteServiceImpl implements NoteService {
     private final MemberFacade memberFacade;
     private final NoteRepository noteRepository;
     private final BookRepository bookRepository;
-
+    private final NoteUtil noteUtil;
 
     private void verifyReadBook(Book book , Integer readPage) {
         if(book.getReadingPage() <= 0) {
@@ -87,6 +90,18 @@ public class NoteServiceImpl implements NoteService {
                 .readPage(note.getReadPage())
                 .bookTitle(note.getBook().getBookTitle())
                 .build();
+    }
+
+    @Override
+    public List<GetNoteResponse> lookUpNotes() {
+        List<Note> notes = noteRepository.findAll();
+
+        if(notes.isEmpty())
+            throw new NotFoundNoteException("존재하지 않는 독서기록장 입니다.");
+
+        List<GetNoteResponse> response = noteUtil.noteListToDtoList(notes);
+
+        return response;
     }
 
 }
