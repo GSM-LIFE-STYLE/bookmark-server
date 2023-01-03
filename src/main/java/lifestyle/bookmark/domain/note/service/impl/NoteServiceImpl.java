@@ -32,10 +32,10 @@ public class NoteServiceImpl implements NoteService {
         }
     }
 
-    private void verifyMemberAndBook(Member member) {
+    private void verifyMember(Member member) {
         Member currentMember = memberFacade.getCurrentMember();
         if(!member.equals(currentMember))
-            throw new UnregisterBookException("등록하지 않은 책입니다.");
+            throw new UnregisterBookException("멤버가 일치하지 않습니다.");
     }
 
     @Override
@@ -45,7 +45,7 @@ public class NoteServiceImpl implements NoteService {
                 .orElseThrow(() -> new NotFoundBookException("존재하지 않은 책입니다."));
         Integer readPage = request.getReadPage();
 
-       verifyMemberAndBook(book.getMember());
+       verifyMember(book.getMember());
 
         if(!book.isDoneToRead())
             verifyReadBook(book, readPage);
@@ -68,7 +68,9 @@ public class NoteServiceImpl implements NoteService {
         Note note = noteRepository.findById(noteId)
                 .orElseThrow(() -> new NotFoundNoteException("기록장을 찾을 수 없습니다."));
 
+        verifyMember(note.getMember());
 
+        noteRepository.deleteById(noteId);
     }
 
 
