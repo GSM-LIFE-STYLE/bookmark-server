@@ -1,4 +1,4 @@
-package lifestyle.bookmark.domain.auth.presentation.dto;
+package lifestyle.bookmark.domain.auth.presentation;
 
 import lifestyle.bookmark.domain.auth.presentation.dto.request.LoginMemberRequest;
 import lifestyle.bookmark.domain.auth.presentation.dto.request.SignUpMemberRequest;
