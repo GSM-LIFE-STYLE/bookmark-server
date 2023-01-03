@@ -46,6 +46,7 @@ public class BookServiceImpl implements BookService {
                 .bookTitle(request.getBookTitle())
                 .bookPage(request.getBookPage())
                 .authorName(request.getAuthorName())
+                .member(memberFacade.getCurrentMember())
                 .build();
 
         bookRepository.save(book);
