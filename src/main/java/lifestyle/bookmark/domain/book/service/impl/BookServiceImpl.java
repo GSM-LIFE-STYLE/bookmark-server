@@ -5,6 +5,7 @@ import lifestyle.bookmark.domain.book.domain.repository.BookRepository;
 import lifestyle.bookmark.domain.book.exception.AlreadyExistsBookException;
 import lifestyle.bookmark.domain.book.exception.NotFoundBookException;
 import lifestyle.bookmark.domain.book.presentation.dto.request.RegisterBookRequest;
+import lifestyle.bookmark.domain.book.presentation.dto.response.BookResponse;
 import lifestyle.bookmark.domain.book.service.BookService;
 import lifestyle.bookmark.domain.member.domain.Member;
 import lifestyle.bookmark.domain.member.domain.repository.MemberRepository;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -62,5 +64,17 @@ public class BookServiceImpl implements BookService {
 
         bookRepository.deleteById(bookId);
         memberRepository.save(currentMember);
+    }
+
+    @Override
+    public BookResponse lookUpBook(Integer bookId) {
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new NotFoundBookException("등록되지 않은 책입니다."));
+
+        return BookResponse.builder()
+                .bookTitle(book.getBookTitle())
+                .bookPage(book.getBookPage())
+                .authorName(book.getAuthorName())
+                .build();
     }
 }
