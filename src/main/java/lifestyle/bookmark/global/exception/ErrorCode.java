@@ -19,6 +19,7 @@ public enum ErrorCode {
     APIKEY_NOT_FOUND("인증키를 찾을 수 없음", 404),
     ALREADY_EXISTS_BOOK("이미 등록된 책입니다.", 400),
     NOT_FOUND_BOOK("존재하지 않는 책 입니다." , 404),
+    UNREGISTER_BOOK("등록되지 않은 책입니다.", 400),
     REFRESH_TOKEN_NOT_FOUND("존재하지 않는 리프레시 토큰입니다.", 404);
 
     private final String message;

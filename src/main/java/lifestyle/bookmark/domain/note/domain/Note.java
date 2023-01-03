@@ -19,13 +19,16 @@ public class Note extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "note_id", nullable = false)
-    private Long noteId;
+    private Integer noteId;
 
     @Column(name = "note_title")
     private String noteTitle;
 
     @Column(name = "note_content")
     private String noteContent;
+
+    @Column(name = "read_page")
+    private Integer readPage;
 
     @OneToOne
     @JoinColumn(name = "book")
