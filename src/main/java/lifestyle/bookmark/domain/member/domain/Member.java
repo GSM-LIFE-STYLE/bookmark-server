@@ -53,4 +53,12 @@ public class Member {
     public void addBook(Book book) {
         this.books.add(book);
     }
+
+    public void addReadBookCount(Integer bookCount) {
+        this.readBookCount += bookCount;
+    }
+
+    public void addReadPage(Integer readPage) {
+        this.readPage += readPage;
+    }
 }

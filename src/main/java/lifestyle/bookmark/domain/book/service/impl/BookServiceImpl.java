@@ -58,6 +58,7 @@ public class BookServiceImpl implements BookService {
                 .member(currentMember)
                 .build();
 
+
         currentMember.addBook(book);
         bookRepository.save(book);
     }
