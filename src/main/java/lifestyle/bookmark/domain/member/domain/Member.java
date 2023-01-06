@@ -40,6 +40,12 @@ public class Member {
     @JoinColumn(name = "books")
     private List<Book> books;
 
+    @Column(name = "read_page")
+    private Integer readPage = 0;
+
+    @Column(name = "read_book_count")
+    private Integer readBookCount = 0;
+
     public void updateBooks(List<Book> books) {
         this.books = books;
     }
