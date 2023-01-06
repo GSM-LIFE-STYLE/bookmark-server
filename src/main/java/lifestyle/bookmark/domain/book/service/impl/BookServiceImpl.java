@@ -48,16 +48,17 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void registerBook(RegisterBookRequest request) {
-
+        Member currentMember = memberFacade.getCurrentMember();
         verifyBookByTitle(request.getBookTitle());
 
         Book book = Book.builder()
                 .bookTitle(request.getBookTitle())
                 .bookPage(request.getBookPage())
                 .authorName(request.getAuthorName())
-                .member(memberFacade.getCurrentMember())
+                .member(currentMember)
                 .build();
 
+        currentMember.addBook(book);
         bookRepository.save(book);
     }
 
@@ -83,7 +84,6 @@ public class BookServiceImpl implements BookService {
         Book book = bookRepository.findById(bookId).orElseThrow(
                 () -> new NotFoundBookException("등록되지 않은 책입니다."));
         updateBookEntity(book, request);
-
         bookRepository.save(book);
     }
 
