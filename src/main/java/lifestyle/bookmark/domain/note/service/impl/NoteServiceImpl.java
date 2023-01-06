@@ -29,8 +29,10 @@ public class NoteServiceImpl implements NoteService {
     private final NoteUtil noteUtil;
 
     private void verifyReadBook(Book book , Integer readPage) {
+        Member currentMember = memberFacade.getCurrentMember();
         if(book.getReadingPage() <= 0) {
             book.updateIsDoneToRead();
+            currentMember.addReadBookCount(1);
         } else {
             book.readBookPage(readPage);
         }
@@ -42,6 +44,11 @@ public class NoteServiceImpl implements NoteService {
             throw new UnregisterBookException("멤버가 일치하지 않습니다.");
     }
 
+    private void doneEventToRead() {
+        Member currentMember = memberFacade.getCurrentMember();
+        currentMember.addReadBookCount(1);
+    }
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void writeNote(WriteNoteRequest request) {
@@ -51,10 +58,11 @@ public class NoteServiceImpl implements NoteService {
 
        verifyMember(book.getMember());
 
-        if(!book.isDoneToRead())
+        if(!book.isDoneToRead()) {
             verifyReadBook(book, readPage);
-
-        bookRepository.save(book);
+        } else {
+            doneEventToRead();
+        }
 
         Note note = Note.builder()
                 .noteContent(request.getNoteContent())
@@ -63,6 +71,7 @@ public class NoteServiceImpl implements NoteService {
                 .book(book)
                 .build();
 
+        bookRepository.save(book);
         noteRepository.save(note);
     }
 
