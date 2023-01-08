@@ -36,8 +36,7 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany
-    @JoinColumn(name = "books")
+    @OneToMany(mappedBy = "bookId")
     private List<Book> books;
 
     @Column(name = "read_page")
