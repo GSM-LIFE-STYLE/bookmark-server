@@ -1,7 +1,7 @@
 package lifestyle.bookmark.domain.member.domain;
 
 import lifestyle.bookmark.domain.book.domain.Book;
-import lifestyle.bookmark.global.role.Role;
+import lifestyle.bookmark.global.enum_type.role.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

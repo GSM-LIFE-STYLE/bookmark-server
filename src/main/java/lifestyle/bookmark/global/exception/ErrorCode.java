@@ -20,6 +20,7 @@ public enum ErrorCode {
     ALREADY_EXISTS_BOOK("이미 등록된 책입니다.", 400),
     NOT_FOUND_BOOK("존재하지 않는 책 입니다." , 404),
     UNREGISTER_BOOK("등록되지 않은 책입니다.", 400),
+    NOT_FOUND_RANK("존재하지 않는 랭크 카테고리입니다." , 404),
     REFRESH_TOKEN_NOT_FOUND("존재하지 않는 리프레시 토큰입니다.", 404);
 
     private final String message;

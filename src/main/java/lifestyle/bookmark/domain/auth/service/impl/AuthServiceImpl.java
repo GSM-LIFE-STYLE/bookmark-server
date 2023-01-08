@@ -16,7 +16,7 @@ import lifestyle.bookmark.domain.member.exception.MemberNotFoundException;
 import lifestyle.bookmark.domain.member.facade.MemberFacade;
 import lifestyle.bookmark.domain.auth.presentation.dto.request.SignUpMemberRequest;
 import lifestyle.bookmark.domain.auth.service.AuthService;
-import lifestyle.bookmark.global.role.Role;
+import lifestyle.bookmark.global.enum_type.role.Role;
 import lifestyle.bookmark.global.security.exception.TokenNotValidException;
 import lifestyle.bookmark.global.security.jwt.JwtTokenProvider;
 import lifestyle.bookmark.global.security.jwt.properties.JwtProperties;
