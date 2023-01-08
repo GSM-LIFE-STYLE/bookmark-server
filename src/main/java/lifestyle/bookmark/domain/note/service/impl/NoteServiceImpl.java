@@ -32,9 +32,11 @@ public class NoteServiceImpl implements NoteService {
         Member currentMember = memberFacade.getCurrentMember();
         if(book.getReadingPage() <= 0) {
             book.updateIsDoneToRead();
+            currentMember.addReadPage(readPage);
             currentMember.addReadBookCount(1);
         } else {
             book.readBookPage(readPage);
+            currentMember.addReadPage(readPage);
         }
     }
 
@@ -57,12 +59,10 @@ public class NoteServiceImpl implements NoteService {
         Integer readPage = request.getReadPage();
 
        verifyMember(book.getMember());
+       verifyReadBook(book, readPage);
 
-        if(!book.isDoneToRead()) {
-            verifyReadBook(book, readPage);
-        } else {
+        if(book.isDoneToRead())
             doneEventToRead();
-        }
 
         Note note = Note.builder()
                 .noteContent(request.getNoteContent())
