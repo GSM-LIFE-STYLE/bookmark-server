@@ -1,4 +1,4 @@
-package lifestyle.bookmark.global.role;
+package lifestyle.bookmark.global.enum_type.role;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
